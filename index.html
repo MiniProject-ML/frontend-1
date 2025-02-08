@@ -78,7 +78,7 @@
       fetch('molecule.mol')
         .then(response => response.text())
         .then(molData => {
-          const moleculeGroup = parseMolFile(molData);
+           moleculeGroup = parseMolFile(molData);
           scene.add(moleculeGroup);
 
           const box = new THREE.Box3().setFromObject(moleculeGroup);
@@ -202,12 +202,21 @@
 
       return group;
     }
+    let moleculeGroup = new THREE.Group();  // Declare at a higher scope
 
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
+function animate() {
+    requestAnimationFrame(animate);
+    
+    // Auto-rotate the molecule
+    if (moleculeGroup) {
+        moleculeGroup.rotation.z += 0.005;
+        moleculeGroup.rotation.y += 0.005; // Rotate around Y-axis
     }
+    
+    controls.update();
+    renderer.render(scene, camera);
+}
+
 
     function onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
